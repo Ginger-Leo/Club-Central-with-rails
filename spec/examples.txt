@@ -1,0 +1,28 @@
+example_id                                            | status | run_time        |
+----------------------------------------------------- | ------ | --------------- |
+./spec/controllers/events_controller_spec.rb[1:1:1:1] | passed | 0.80466 seconds |
+./spec/controllers/events_controller_spec.rb[1:1:1:2] | passed | 0.92823 seconds |
+./spec/controllers/events_controller_spec.rb[1:1:2:1] | passed | 0.82335 seconds |
+./spec/controllers/finances_controller_spec.rb[1:1:1] | passed | 0.85859 seconds |
+./spec/controllers/finances_controller_spec.rb[1:1:2] | passed | 0.91975 seconds |
+./spec/controllers/hub_controller_spec.rb[1:1:1:1]    | passed | 0.60693 seconds |
+./spec/controllers/hub_controller_spec.rb[1:1:2:1]    | passed | 0.80406 seconds |
+./spec/controllers/users_controller_spec.rb[1:1:1]    | passed | 0.85163 seconds |
+./spec/controllers/users_controller_spec.rb[1:1:2]    | passed | 0.7836 seconds  |
+./spec/models/event_spec.rb[1:1:1]                    | passed | 0.62919 seconds |
+./spec/models/event_spec.rb[1:1:2]                    | passed | 0.63251 seconds |
+./spec/models/event_spec.rb[1:2:1]                    | passed | 0.5484 seconds  |
+./spec/models/finance_spec.rb[1:1:1]                  | passed | 0.57431 seconds |
+./spec/models/finance_spec.rb[1:1:2]                  | passed | 0.58752 seconds |
+./spec/models/finance_spec.rb[1:2:1]                  | passed | 0.76268 seconds |
+./spec/models/user_spec.rb[1:1:1]                     | passed | 0.85061 seconds |
+./spec/models/user_spec.rb[1:1:2]                     | passed | 0.77197 seconds |
+./spec/requests/hub_flow_spec.rb[1:1:1]               | failed | 0.82136 seconds |
+./spec/requests/hub_flow_spec.rb[1:1:2]               | failed | 0.56417 seconds |
+./spec/system/authentication_spec.rb[1:1:1]           | failed | 15.94 seconds   |
+./spec/system/authentication_spec.rb[1:2:1]           | failed | 16.16 seconds   |
+./spec/system/authentication_spec.rb[1:2:2]           | failed | 15.93 seconds   |
+./spec/system/hub_spec.rb[1:1:1]                      | failed | 16.13 seconds   |
+./spec/system/hub_spec.rb[1:2:1]                      | passed | 0.78169 seconds |
+./spec/system/visual_test_spec.rb[1:1:1]              | passed | 10.72 seconds   |
+./spec/system/visual_test_spec.rb[1:1:2]              | failed | 29.19 seconds   |

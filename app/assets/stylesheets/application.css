@@ -1,0 +1,170 @@
+/* CSS Custom Properties (Variables) */
+:root {
+--cc-green-bg: rgb(218, 246, 194);
+--cc-decline-red:  rgb(220, 53, 69);
+}
+
+body {
+background-color: white;
+font-size: 16px;
+line-height: 1.6;
+}
+
+.logo-circles {
+width: 150px;
+height: 150px;
+border-radius: 50%;
+background-color: var(--cc-green-bg);
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.cc-green-bg {
+background-color: var(--cc-green-bg);
+}
+
+.vh-100-minus-footer {
+min-height: calc(100vh - 200px);
+}
+
+.btc {
+border-top-color: var(--cc-green-bg) !important;
+border-bottom-color: var(--cc-green-bg) !important;
+border-top-width: 3px !important;
+border-bottom-width: 3px !important;
+}
+
+.btn-hub {
+background-color: var(--cc-green-bg);
+color: black;
+border-radius: 5px;
+padding: 10px 20px;
+border: 2px solid white;
+transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.btn-admin {
+background-color: white !important;
+color: black;
+}
+.btn-admin:hover {
+background-color: white !important;
+color: var(--cc-green-bg) !important;
+}
+
+.btn-hub:hover {
+background-color: white;
+color: var(--cc-green-bg);
+border-color: black;
+color: black;
+}
+
+.btn-hub:active {
+background-color: var(--cc-green-bg) !important;
+color: black;
+border-color: var(--cc-green-bg) !important;
+transition: background 0.2s, color 0.2s, border-color 0.2s;
+} 
+
+.border-style {
+min-height: 200px; 
+border-color: var(--cc-green-bg) !important;
+margin-left: 2rem; 
+margin-right: 2rem; 
+margin-top: 2rem;
+border-style: solid;
+border-radius: 10px;
+}
+
+.info-box{
+max-width: 95%;
+margin: 0 auto;
+}
+
+.edit-button {
+background-color: transparent;
+border: none;
+color: rgb(137, 207, 240);
+cursor: pointer;
+font-size: 1rem;
+display: flex;
+align-items: center;
+}
+
+.delete-button {
+background-color: transparent;
+border: none;
+color: var(--cc-decline-red) !important;
+cursor: pointer;
+font-size: 1rem;
+display: flex;
+align-items: center;
+}
+
+.delete-button:hover{
+color: darkred !important;
+}
+
+.border-colour {
+border: 5px solid var(--cc-green-bg) !important;
+border-radius: 5px;
+}
+
+/* Login/Session Styles */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-form {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 30px;
+  color: rgb(51, 51, 51);
+}
+
+.btn-color {
+  background-color: var(--cc-decline-red) !important;
+  color: white !important;
+  border-radius: 5px;
+}
+
+.form-floating {
+  margin-bottom: 20px;
+}
+
+.alert {
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+/* Custom Components */
+.custom-card {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 10px;
+}
+
+/* .btn-custom {
+  background-color: rgb(0, 123, 255);
+  border-color: rgb(0, 123, 255);
+  padding: 10px 20px;
+  font-weight: bold;
+} */
+
+.btn-custom:hover {
+  background-color: rgb(0, 86, 179);
+  border-color: rgb(0, 86, 179);
+}
+
+.dropdown-menu {
+  overflow-y: auto;
+  max-height: 300px;
+}

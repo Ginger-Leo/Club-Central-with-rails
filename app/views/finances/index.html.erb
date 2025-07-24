@@ -1,0 +1,124 @@
+<body>
+    <h1 class="text-center mt-5">Club Finances</h1>
+    <section class="bg-white d-flex justify-content-center">
+        <div class="container-xl my-4 border-style">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="pt-3 mb-2">Finances</h2>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-primary btn-hub" data-bs-toggle="modal" data-bs-target="#deductPaymentModal">deduct payment</button>
+                    <button class="btn btn-outline-primary btn-hub" data-bs-toggle="modal" data-bs-target="#addPaymentModal">make payment</button>
+                </div>
+            </div>
+            
+            <div class="card cc-green-bg border-0 mb-3 py-3 ps-4 pe-2">
+                <div class="row g-1">
+                    <div class="col-4">
+                        <div class="bg-white rounded info-box h-100 p-4 d-flex flex-column justify-content-center">
+                            <h5 class="card-title fs-4 mb-2">club balance</h5>
+                            <p class="text-muted mb-0"><%= User.find_by(username: 'Admin')&.balance || 0 %></p>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <div class="bg-white rounded info-box h-100 p-4 d-flex flex-column justify-content-center">
+                            <h5 class="card-title fs-4 mb-2">transactions</h5>
+                            <% if @recent_transactions && @recent_transactions.any? %>
+                                <div style="max-height: 200px; overflow-y: auto;">
+                                    <% @recent_transactions.each do |transaction| %>
+                                        <div class="d-flex justify-content-between align-items-center mb-2 small border-bottom pb-1">
+                                            <div>
+                                                <div class="fw-semibold"><%= transaction.transaction_description if transaction.respond_to?(:transaction_description) %></div>
+                                                <div class="text-muted small"><%= transaction.notes if transaction.notes.present? %></div>
+                                            </div>
+                                            <div class="text-end">
+                                                <div class="<%= transaction.respond_to?(:payment?) && transaction.payment? ? 'text-success' : 'text-danger' %>">
+                                                    <%= transaction.respond_to?(:payment?) && transaction.payment? ? '+' : '' %><%= transaction.amount.abs %>
+                                                </div>
+                                                <div class="text-muted small"><%= transaction.created_at.strftime('%m/%d %H:%M') %></div>
+                                            </div>
+                                        </div>
+                                    <% end %>
+                                </div>
+                            <% else %>
+                                <p class="text-muted mb-0">No transactions yet</p>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <div class="container-xl mt-4 d-flex justify-content-center">
+        <%= link_to "Back to Hub", hub_path, class: "btn btn-hub mt-4 mb-4" %>
+    </div>
+</body>
+
+<div class="modal fade modal-lg" id="addPaymentModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content border-3 border-colour">
+            <div class="modal-header">
+                <h5 class="modal-title">player makes payment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <%= form_with url: add_payment_finances_path, method: :post, local: true do |form| %>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="user_id" class="form-label">Payer (who is paying):</label>
+                        <%= form.select :user_id, 
+                            options_from_collection_for_select(@all_roster_players, :id, :username), 
+                            { prompt: 'Select a player' }, 
+                            { class: 'form-select', required: true } %>
+                    </div>
+                    <div class="mb-3">
+                        <label for="payee_id" class="form-label">Payee (who receives the money):</label>
+                        <%= form.select :payee_id, 
+                            [['External', 'external']] + @all_roster_players.map { |player| [player.username, player.id] },
+                            { prompt: 'Select recipient:'}, 
+                            { class: 'form-select' } %>
+                    </div>
+                    <div class="mb-3">
+                        <label for="amount" class="form-label">Amount:</label>
+                        <%= form.number_field :amount, step: 0.01, min: 0.01, class: 'form-control', required: true %>
+                    </div>
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Notes:</label>
+                        <%= form.text_area :notes, rows: 3, class: 'form-control'%> 
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-hub">confirm payment</button>
+                </div>
+            <% end %>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-lg" id="deductPaymentModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content border-3 border-colour">
+            <div class="modal-header">
+                <h5 class="modal-title">deduct payment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <%= form_with url: deduct_payment_finances_path, method: :post, local: true do |form| %>
+                <div class="modal-body">
+                    <%= form.hidden_field :payee_id, value: User.find_by(username: 'Admin')&.id %>
+                    <div class="mb-3">
+                        <label for="user_id" class="form-label">deduct payment from:</label>
+                        <%= form.select :user_id, 
+                            [['External', 'external']] + @all_roster_players.map { |player| [player.username, player.id] },
+                            { prompt: 'Select a player' }, 
+                            { class: 'form-select', required: true } %>
+                    </div>
+                    <div class="mb-3">
+                        <label for="amount" class="form-label">Amount:</label>
+                        <%= form.number_field :amount, step: 0.01, min: 0.01, class: 'form-control', required: true %>
+                    </div>
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Notes:</label>
+                        <%= form.text_area :notes, rows: 3, class: 'form-control' %>
+                    </div>
+                    <button type="submit" class="btn btn-danger btn-hub">confirm payment</button>
+                </div>
+            <% end %>
+        </div>
+    </div>
+</div>

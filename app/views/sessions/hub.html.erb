@@ -1,0 +1,616 @@
+<body>
+    <section class="bg-white d-flex justify-content-center align-items-start pb-4 pt-5">
+        <h1 class="text-center fw-semi-bold">Welcome to the hub, <%= @user.username %>!</h1> 
+    </section>
+    <section id="events-section" class="bg-white d-flex justify-content-center">
+        <div class="container-xl my-4 border-style">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="py-3 mb-0">Upcoming events</h2>
+                <div>
+                    <% if @user.access_level == 'admin' %>
+                        <button class="btn btn-outline-primary btn-hub me-2" data-bs-toggle="modal" data-bs-target="#addEventModal">add event</button>
+                    <% end %>
+                    <button class="btn btn-outline-primary btn-hub" data-bs-toggle="modal" data-bs-target="#viewEventModal">view more</button>
+                </div>
+            </div>
+            
+            <div class="card cc-green-bg border-0 mb-3 p-2">
+                <% if @upcoming_events.any? %>
+                    <% @upcoming_events.each do |event| %>
+                        <div class="card w-100 my-1 bg-white ps-3 pe-1 info-box border-0">
+                            <div class="card-body d-flex justify-content-between align-items-center py-2">
+                                <div>
+                                    <h5 class="card-title fs-5 mb-0"><%= event.event_type.titleize %></h5>
+                                    <p class="card-text text-muted mb-0"><%= event.notes %></p>
+                                    <p class="card-text text-muted mb-0"><%= event.location %></p>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <span class="badge bg-secondary-subtle text-dark-emphasis fs-6 me-3">
+                                        <%= event.datetime.strftime("%a, %b %d, %Y - %I:%M %p") %>
+                                    </span>
+                                    <% if @user.access_level == 'admin' %>
+                                        <div class="d-flex">
+                                            <button class="btn btn-outline-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editEventModal<%= event.id %>">
+                                                <i class="bi bi-pen"></i>
+                                            </button>
+                                            <%= button_to event_path(event), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-outline-danger btn-sm" do %>
+                                                <i class="bi bi-trash3"></i>
+                                            <% end %>
+                                        </div>
+                                    <% end %>
+                                </div>
+                            </div>
+                        </div>
+                    <% end %>
+                <% else %>
+                    <div class="card w-100 my-1 bg-white ps-3 pe-1 info-box border-0">
+                        <div class="card-body text-center">
+                            <h5 class="card-title fs-5 text-muted">No upcoming events.</h5>
+                        </div>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+    </section>
+
+   
+    <section id="finances-section" class="bg-white d-flex justify-content-center">
+        <div class="container-xl my-4 border-style">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="pt-3 mb-2">Finances</h2>
+                <div class="d-flex">
+                    <% if @user.access_level == 'admin' %>
+                        <button class="btn btn-outline-primary btn-hub me-2" onclick="window.location.href='<%= club_finances_path %>'">
+                            club finances
+                        </button>
+                    <% end %>
+                    <button class="btn btn-outline-primary btn-hub" data-bs-toggle="modal" data-bs-target="#addPaymentModal">make payment</button>
+                </div>
+            </div>
+            <div class="row pt-0 mt-1">
+                <div class="col-12 px-3 ">
+                    <div class="card cc-green-bg border-0 mb-3 py-3 ps-4 pe-2">
+                        <div class="row g-1">
+                            <div class="col-4">
+                                <div class="bg-white rounded info-box h-100 p-4 d-flex flex-column justify-content-center">
+                                    <h5 class="card-title fs-4 mb-2">balance</h5>
+                                    <p class="text-muted mb-0"><%= @user.balance %></p>
+                                </div>
+                            </div>
+                            <div class="col-8">
+                                <div class="bg-white rounded info-box h-100 p-4 d-flex flex-column justify-content-center">
+                                    <h5 class="card-title fs-4 mb-2">transactions</h5>
+                                        <% payment_sent_transactions = @recent_transactions.select { |transaction| transaction.transaction_type == 'payment_sent' } %>
+                                        <% if payment_sent_transactions.any? %>
+                                <div style="max-height: 200px; overflow-y: auto;">
+                                    <% payment_sent_transactions.each do |transaction| %>
+                                        <div class="d-flex justify-content-between align-items-center mb-2 small border-bottom pb-1">
+                                            <div>
+                                                <div class="fw-semibold"><%= transaction.transaction_description %></div>
+                                                <div class="text-muted small"><%= transaction.notes if transaction.notes.present? %></div>
+                                            </div>
+                                            <div class="text-end">
+                                                <div class="text-danger">
+                                                    -<%= transaction.amount.abs %>
+                                                </div>
+                                                <div class="text-muted small"><%= transaction.created_at.strftime('%m/%d %H:%M') %></div>
+                                            </div>
+                                            </div>
+                                            <% end %>
+                                        </div>
+                                    <% else %>
+                                        <p class="text-muted mb-0">No payments sent yet</p>
+                                    <% end %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <section id="players-section" class="bg-white d-flex justify-content-center">
+        <div class="container-xl my-4 border-style">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="py-3 mb-0">Roster</h2>
+                <div>
+                    <% if @user.access_level == 'admin' %>
+                        <button class="btn btn-outline-primary btn-hub me-2" data-bs-toggle="modal" data-bs-target="#addPlayerModal">add player</button>
+                    <% end %>
+                    <button class="btn btn-outline-primary btn-hub" data-bs-toggle="modal" data-bs-target="#editPlayerModalSelf<%= @user.id %>">edit info</button>
+                    <button class="btn btn-outline-primary btn-hub" data-bs-toggle="modal" data-bs-target="#viewPlayerModal">view more</button>
+                </div>
+            </div>
+            
+            <div class="card cc-green-bg border-0 mb-3 p-2">
+                <% if @roster_players.any? %>
+                    <% @roster_players.each do |player| %>
+                        <div class="card w-100 my-1 bg-white ps-3 pe-1 info-box border-0">
+                            <div class="card-body d-flex justify-content-between align-items-center py-2">
+                                <div>
+                                    <% if player.access_level == 'player' && @user.access_level == 'admin' %>
+                                        <%= button_to promote_user_path(player), method: :patch, class: "btn btn-admin", title: "Promote to admin" do %>
+                                            <i class="bi bi-bookmark-plus"></i>
+                                        <% end %>
+                                    <% elsif player.access_level == 'admin' && @user.access_level == 'admin' %>
+                                        <%= button_to demote_user_path(player), method: :patch, class: "btn bg-white btn-warning", title: "Demote to player" do %>
+                                            <i class="bi bg-white bi-bookmark-check"></i>
+                                        <% end %>
+                                        
+                                    <% end %>
+                                    <h5 class="card-title fs-5 mb-0">
+                                        <%= player.username.titleize %>
+                                        <% if player.access_level == 'admin' %>
+                                            <span class="badge bg-primary ms-2">admin</span>
+                                        <% else %>
+                                            <span class="badge bg-secondary ms-2">player</span>
+                                        <% end %>
+                                    </h5>
+                                    <p class="card-text text-muted mb-0">
+                                        <%= player.position %>
+                                        <% if player.car %>
+                                            <i class="bi bi-car-front-fill"></i>
+                                        <% end %>
+                                    </p>
+                                    <% if @user.access_level == 'admin' %>
+                                        <p class="card-text text-muted mb-0">balance: <%= player.balance %></p>
+                                    <% end %>
+                                </div>
+                                
+                                <div class="d-flex align-items-center">
+                                    <span class="badge bg-secondary-subtle text-dark-emphasis fs-6 me-3">
+                                        <%= player.location %>
+                                    </span>
+                                    <% if @user.access_level == 'admin' %>
+                                        <div class="d-flex">
+                                            <button class="btn btn-outline-primary btn-sm me-2" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#editPlayerModal<%= player.id %>">
+                                                <i class="bi bi-pen"></i>
+                                            </button>
+                                            <%= button_to user_path(player), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-outline-danger btn-sm" do %>
+                                                <i class="bi bi-trash3"></i>
+                                            <% end %>
+                                        </div>
+                                    <% end %>
+                                </div>
+                            </div>
+                        </div>
+                    <% end %>
+                <% else %>
+                    <div class="card w-100 my-1 bg-white ps-3 pe-1 info-box border-0">
+                        <div class="card-body text-center">
+                            <h5 class="card-title fs-5 text-muted">No players on the roster.</h5>
+                        </div>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+    </section>
+    
+
+
+    <%# Modals %>
+    <%# Event Modals %>
+
+    <% if @user.access_level == 'admin' %>
+        <% @upcoming_events.each do |event| %>
+            <div class="modal fade modal-lg" id="editEventModal<%= event.id %>" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered ">
+                    <div class="modal-content border-3 border-colour">
+                        <div class="modal-header">
+                            <h5 class="modal-title">edit event: <%= event.event_type.titleize %></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <%= form_with model: event, local: true do |form| %>
+                                <div class="mb-3">
+                                    <label for="event_datetime" class="form-label">date and time:</label>
+                                    <%= form.datetime_local_field :datetime, class: 'form-control', required: true %>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="event_event_type" class="form-label">event type:</label>
+                                    <%= form.select :event_type, 
+                                        [['Special Event', 'special event'], ['Match', 'match'], ['Training', 'training']], 
+                                        { prompt: 'Select event type' }, 
+                                        { class: 'form-select', required: true } %>
+                                </div>
+                                                                                
+                                <div class="mb-3">
+                                    <label for="event_location" class="form-label">location:</label>
+                                    <%= form.text_field :location, class: 'form-control' %>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="event_notes" class="form-label">notes:</label>
+                                    <%= form.text_area :notes, rows: 3, class: 'form-control' %>
+                                </div>
+                                                                                                                               
+                                <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">cancel</button>
+                                    <%= form.submit "update event", class: "btn btn-primary btn-hub" %>
+                                </div>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% end %>
+    <% end %>
+
+    <div class="modal fade modal-lg" id="addEventModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-content border-3 border-colour">
+                <div class="modal-header">
+                    <h5 class="modal-title">add event</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <%= form_with model: Event.new, local: true do |form| %>
+                        <div class="mb-3">
+                            <label for="event_datetime" class="form-label">date and time:</label>
+                            <%= form.datetime_local_field :datetime, class: 'form-control', required: true %>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="event_event_type" class="form-label">event type:</label>
+                            <%= form.select :event_type, 
+                                [['Special Event', 'special event'], ['Match', 'match'], ['Training', 'training']], 
+                                { prompt: 'Select event type' }, 
+                                { class: 'form-select', required: true } %>
+                        </div>
+                                                                        
+                        <div class="mb-3">
+                            <label for="event_location" class="form-label">location:</label>
+                            <%= form.text_field :location, class: 'form-control' %>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="event_notes" class="form-label">notes:</label>
+                            <%= form.text_area :notes, rows: 3, class: 'form-control' %>
+                        </div>
+                                                                                                                       
+                        <div class="d-flex justify-content-end">
+                            <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">cancel</button>
+                            <%= form.submit "create event", class: "btn btn-primary btn-hub" %>
+                        </div>
+                    <% end %>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade modal-lg" id="viewEventModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-content border-3 border-colour">
+                <div class="modal-header">
+                    <h5 class="modal-title">view event</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <% if @all_events.any? %>
+                        <% @all_events.each do |event| %>
+                            <div class="mb-3 border-bottom pb-2">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong><%= event.event_type.titleize %></strong>
+                                        <span class="badge bg-secondary ms-2">
+                                            <%= event.datetime.strftime("%a, %b %d, %Y - %I:%M %p") %>
+                                        </span>
+                                        <div class="text-muted small mb-0">Location: <%= event.location %></div>
+                                        <div class="text-muted small"><%= event.notes %></div>
+                                    </div>
+                                    <% if @user.access_level == 'admin' %>
+                                        <div class="d-flex justify-content-end">
+                                            <button class="btn btn-outline-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editEventModal<%= event.id %>">
+                                                <i class="bi bi-pen"></i>
+                                            </button>
+                                            <%= button_to event_path(event), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-outline-danger btn-sm" do %>
+                                                <i class="bi bi-trash3"></i>
+                                            <% end %>
+                                        </div>
+                                    <% end %>
+                                </div>
+                            </div>
+                        <% end %>
+                    <% else %>
+                        <div class="text-muted small">No events upcoming</div>
+                    <% end %>
+                </div> 
+            </div>
+        </div>
+    </div>
+
+    <%# Player Modals %>
+
+  <div class="modal fade modal-lg" id="editPlayerModalSelf<%= @user.id %>" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered ">
+                    <div class="modal-content border-3 border-colour">
+                        <div class="modal-header">
+                            <h5 class="modal-title">edit player: <%= @user.username %></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <%= form_with model: @user, local: true do |form| %>
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">name:</label>
+                                    <%= form.text_field :username, class: 'form-control', required: true %>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">email:</label>
+                                    <%= form.email_field :email, class: 'form-control', required: true %>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="position" class="form-label">position:</label>
+                                    <%= form.text_field :position, class: 'form-control' %>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="chain" class="form-label">chain:</label>
+                                    <%= form.text_field :chain, class: 'form-control' %>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="location" class="form-label">location:</label>
+                                    <%= form.text_field :location, class: 'form-control' %>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <%= form.check_box :car, class: 'form-check-input' %>
+                                        <label class="form-check-label" for="user_car">
+                                            has car
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">password (leave blank to keep current):</label>
+                                    <%= form.password_field :password, class: 'form-control', autocomplete: 'new-password', placeholder: 'Enter new password or leave blank' %>
+                                </div>
+                                                                
+                                <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">cancel</button>
+                                    <%= form.submit "update player", class: "btn btn-primary btn-hub" %>
+                                </div>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    <% if @user.access_level == 'admin' %>
+        <% @all_roster_players.each do |player| %>
+            <div class="modal fade modal-lg" id="editPlayerModal<%= player.id %>" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered ">
+                    <div class="modal-content border-3 border-colour">
+                        <div class="modal-header">
+                            <h5 class="modal-title">edit player: <%= player.username %></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <%= form_with model: player, local: true do |form| %>
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">name:</label>
+                                    <%= form.text_field :username, class: 'form-control', required: true %>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">email:</label>
+                                    <%= form.email_field :email, class: 'form-control', required: true %>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="position" class="form-label">position:</label>
+                                    <%= form.text_field :position, class: 'form-control' %>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="chain" class="form-label">chain:</label>
+                                    <%= form.text_field :chain, class: 'form-control' %>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="location" class="form-label">location:</label>
+                                    <%= form.text_field :location, class: 'form-control' %>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <%= form.check_box :car, class: 'form-check-input' %>
+                                        <label class="form-check-label" for="user_car">
+                                            has car
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">cancel</button>
+                                    <%= form.submit "update player", class: "btn btn-primary btn-hub" %>
+                                </div>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% end %>
+    <% end %>
+
+    <div class="modal fade modal-lg" id="addPlayerModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-content border-3 border-colour">
+                <div class="modal-header">
+                    <h5 class="modal-title">add player</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <%= form_with model: User.new, local: true do |form| %>
+                        <%= form.hidden_field :admin_adding_player, value: true %>
+                        
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username:</label>
+                            <%= form.text_field :username, class: 'form-control', required: true %>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email:</label>
+                            <%= form.email_field :email, class: 'form-control', required: true %>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password:</label>
+                            <%= form.password_field :password, class: 'form-control', required: true %>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="position" class="form-label">Position:</label>
+                            <%= form.text_field :position, class: 'form-control' %>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="chain" class="form-label">Chain:</label>
+                            <%= form.text_field :chain, class: 'form-control' %>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="location" class="form-label">Location:</label>
+                            <%= form.text_field :location, class: 'form-control' %>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <%= form.check_box :car, class: 'form-check-input' %>
+                                <label class="form-check-label" for="user_car">
+                                    has car
+                                </label>
+                            </div>
+                        </div>
+                            
+                        <div class="d-flex justify-content-end">
+                            <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Cancel</button>
+                            <%= form.submit "Add Player", class: "btn btn-primary btn-hub" %>
+                        </div>
+                    <% end %>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade modal-lg" id="viewPlayerModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-content border-3 border-colour">
+                <div class="modal-header">
+                    <h5 class="modal-title">view player</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <% if @roster_players.any? %>
+                        <% if @user.access_level == 'admin' %>
+                            <% @all_roster_players.each do |player| %>
+                                <div class="mb-3 border-bottom  pb-2">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong><%= player.username.titleize %></strong>
+                                            <span class="badge <%= player.access_level == 'admin' ? 'bg-primary' : 'bg-secondary' %> ms-2">
+                                                <%= player.access_level %>
+                                            </span>
+                                            <div class="text-muted small mb-0">position: <%= player.position %> <span class="ms-2">location: <%= player.location %></span></div>
+                                            <div class="text-muted small">balance: <%= player.balance %></div>
+                                        </div>
+                                        <div class="d-flex justify-content-end">
+                                            <% if player.access_level == 'player' && @user.access_level == 'admin' %>
+                                                <%= button_to promote_user_path(player), method: :patch, class: "btn btn-admin btn-sm me-2", title: "Promote to admin" do %>
+                                                <i class="bi bi-bookmark-plus"></i>
+                                                <% end %>
+                                            <% elsif player.access_level == 'admin' && @user.access_level == 'admin' %>
+                                                <%= button_to demote_user_path(player), method: :patch, class: "btn btn-outline-warning btn-sm me-2", title: "Demote to player" do %>
+                                                <i class="bi bi-bookmark-check"></i>
+                                                <% end %>
+                                            <% end %>
+                                            <button class="btn btn-outline-primary btn-sm me-2" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#editPlayerModal<%= player.id %>">
+                                                <i class="bi bi-pen"></i>
+                                            </button>
+                                            <%= button_to user_path(player), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-outline-danger btn-sm" do %>
+                                                <i class="bi bi-trash3"></i>
+                                            <% end %>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            <% end %>
+                        <% elsif @user.access_level == 'player' %>
+                            <% @all_roster_players.each do |player| %>
+                                <div class="mb-3">
+                                    <strong><%= player.username.titleize %></strong>
+                                    <span class="badge <%= player.access_level == 'admin' ? 'bg-primary' : 'bg-secondary' %> ms-2">
+                                        <%= player.access_level %>
+                                    </span>
+                                    <div class="text-muted small">position: <%= player.position %></div>
+                                
+                                </div>
+                            <% end %>
+                        <% end %>
+                    <% else %>
+                        <p>no players in roster</p>
+                    <% end %>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%# Finance Modals %>
+
+    <div class="modal fade modal-lg" id="addPaymentModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content border-3 border-colour">
+            <div class="modal-header">
+                <h5 class="modal-title">player makes payment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <%= form_with url: add_payment_finances_path, method: :post, local: true do |form| %>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="user_id" class="form-label">Payer:</label>
+                        <%= form.hidden_field :user_id, value: @user.id %>
+                        <input type="text" class="form-control" value="<%= @user.username %>" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="payee_id" class="form-label">Payee:</label>
+                        <%= form.select :payee_id, 
+                            options_from_collection_for_select(
+                                @all_roster_players.select { |player| 
+                                    if @user.access_level == 'player'
+                                        player.username.downcase == 'admin'
+                                    else
+                                        ['admin', 'external'].include?(player.username.downcase)
+                                    end
+                                }, 
+                                :id, :username
+                            ), 
+                            { prompt: 'Select recipient'}, 
+                            { class: 'form-select' } %>
+                    </div>
+                    <div class="mb-3">
+                        <label for="amount" class="form-label">Amount:</label>
+                        <%= form.number_field :amount, step: 0.01, min: 0.01, class: 'form-control', required: true %>
+                    </div>
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Notes:</label>
+                        <%= form.text_area :notes, rows: 3, class: 'form-control' %>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-hub">confirm payment</button>
+                </div>
+                <%= form.hidden_field :redirect_to, value: hub_path %>
+            <% end %>
+        </div>
+    </div>
+</div>
+</body>
+  

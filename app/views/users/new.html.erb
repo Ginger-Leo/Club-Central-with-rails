@@ -1,0 +1,80 @@
+<body>
+    <div class="container-fluid">
+        <div class="row g-0 vh-100-minus-footer">
+            <div class="col-12 col-md-6 cc-green-bg d-flex align-items-center justify-content-center">
+                <div class="text-center" style="width: 100%; max-width: 400px;">
+                    <div class="mb-4">
+                        <div class="bg-white rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width: 250px; height: 250px;">
+                          <div class="cc-green-bg rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width: 225px; height: 225px;">
+                            <h1 class="text-dark mb-0 text-start fs-1">club<br>central</h1>
+                          </div>
+                        </div>
+                        <p class="text-black mt-3 fs-3 fw-2">User Registration System</p>
+                    </div>
+                    <div class="mb-5 pb-4"></div>
+                    <div class="d-grid">
+                        <%= link_to "Back to Login", login_path, class: "btn btn-primary btn-color fs-3" %>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 d-flex align-items-center justify-content-center bg-white">
+                <div class="container mt-5">
+                  <div class="row justify-content-center">
+                    <div class="col-md-6">
+                      
+                        <div class="w-100">
+                          <h1 class="text-start fw-2">Sign Up</h1>
+                          <p class="text-start">Create your Club Central account</p>
+                          
+                          <% if flash[:alert] %>
+                            <div class="alert alert-warning">
+                              <%= flash[:alert] %>
+                            </div>
+                          <% end %>
+                          
+                          <%= form_with model: @user, local: true do |form| %>
+                            <% if @user.errors.any? %>
+                              <div class="alert alert-danger">
+                                <h6 class="mb-2"><strong>Please fix the following errors:</strong></h6>
+                                <ul class="mb-0">
+                                  <% @user.errors.full_messages.each do |message| %>
+                                    <li><%= message %></li>
+                                  <% end %>
+                                </ul>
+                              </div>
+                            <% end %>
+                            
+                            <div class="mb-3">
+                              <%= form.label :username, "Name", class: "form-label" %>
+                              <%= form.text_field :username, class: "form-control", placeholder: "Enter your name" %>
+                            </div>
+                            
+                            <div class="mb-3">
+                              <%= form.label :email, "Email Address", class: "form-label" %>
+                              <%= form.email_field :email, class: "form-control", placeholder: "Enter your email" %>
+                            </div>
+                            
+                            <div class="mb-3">
+                              <%= form.label :password, "Password", class: "form-label" %>
+                              <%= form.password_field :password, class: "form-control", placeholder: "Enter password (min 6 characters)" %>
+                            </div>
+                            
+                            <div class="mb-3">
+                              <%= form.label :password_confirmation, "Confirm Password", class: "form-label" %>
+                              <%= form.password_field :password_confirmation, class: "form-control", placeholder: "Re-enter password" %>
+                            </div>
+                            
+                            <div class="d-grid">
+                              <%= form.submit "Create Account", class: "btn btn-primary btn-color fs-3" %>
+                            </div>
+                          <% end %>
+                          
+                        </div>
+                      
+                    </div>
+                  </div>
+                </div>
+
+            </div>
+        </div>
+    </div>

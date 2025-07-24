@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Club Central" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+ 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+  </head>
+
+  <% if session[:user_id] %>
+    <header class="bg-white text-black py-3 border-bottom btc">
+        <div class="container-xl d-flex justify-content-between align-items-center">
+          
+                <div class="cc-green-bg rounded-circle d-flex align-items-center justify-content-center mb-md-0 logo-circles">
+                    <h1 class="text-dark mb-0 text-start fs-3">club<br>central</h1>
+                </div>
+            
+            <nav>
+                <ul class="nav">
+                    <li class="nav-item px-2"><a href="<%= hub_path %>" class="nav-link text-black fs-5">Home</a></li>
+                    <li class="nav-item px-2"><a href="#events-section" class="nav-link text-black fs-5">Events</a></li>
+                    <li class="nav-item px-2"><a href="#players-section" class="nav-link text-black fs-5">Players</a></li>
+                    <li class="nav-item px-2"><a href="#finances-section" class="nav-link text-black fs-5">Finances</a></li>
+                    <li class="nav-item">
+                        <%= button_to 'Logout', logout_path, method: :delete, class: 'btn btn-outline-danger fs-5'%>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+  <% end %>
+
+  <body>
+    <% if flash[:notice] %>
+        <div class="alert alert-success alert-dismissible fade show mx-3 mt-2" role="alert">
+            <i class="bi bi-check-circle"></i> <%= flash[:notice] %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    <% end %>
+    
+    <% if flash[:alert] %>
+        <div class="alert alert-danger alert-dismissible fade show mx-3 mt-2" role="alert">
+            <i class="bi bi-exclamation-triangle"></i> <%= flash[:alert] %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    <% end %>
+
+    <%= yield %>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+
+  </body>
+
+  <footer class="bg-white text-black py-4 border-top btc">
+    <div class="container-xl d-flex flex-column flex-md-row justify-content-between align-items-center">
+    <div class="mb-3 mb-md-0">
+      <h5 class="fw-normal fs-2 mb-2">club central</h5>
+      <div class="pt-3">
+        <a href="https://www.instagram.com/" class="text-black me-2" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+        <a href="https://www.facebook.com/" class="text-black me-2" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+        <a href="https://www.x.com/" class="text-black me-2" aria-label="X"><i class="bi bi-twitter-x"></i></a>
+        <a href="https://youtu.be/dQw4w9WgXcQ?feature=shared" class="text-black" aria-label="YouTube" target="_blank" rel="noopener noreferrer"><i class="bi bi-youtube"></i></a>
+      </div>
+    </div>
+      <div class="d-flex flex-column flex-md-row justify-content-end w-100">
+        <div class="me-md-5 mb-4 mb-md-0" style="min-width: 160px;">
+          <div class="mb-1">
+            <a href="#" class="text-black text-decoration-none fs-5 ">Events</a>
+          </div>
+          <ul class="list-unstyled ms-0 mb-0">
+            <li><a href="#" class="text-black text-decoration-none fs-6">company info</a></li>
+            <li><a href="#" class="text-black text-decoration-none fs-6">testimonials</a></li>
+          </ul>
+        </div>
+        <div class="me-md-5 mb-4 mb-md-0" style="min-width: 160px;">
+          <div class="mb-1">
+            <a href="#" class="text-black text-decoration-none fs-5 ">Players</a>
+          </div>
+          <ul class="list-unstyled ms-0 mb-0">
+            <li><a href="#" class="text-black text-decoration-none fs-6">FAQs</a></li>
+            <li><a href="#" class="text-black text-decoration-none fs-6">links</a></li>
+          </ul>
+        </div>
+        <div style="min-width: 160px;">
+          <div class="mb-1">
+            <a href="#" class="text-black text-decoration-none fs-5 ">Finances</a>
+          </div>
+          <ul class="list-unstyled ms-0 mb-0">
+            <li><a href="#" class="text-black text-decoration-none fs-6">legal</a></li>
+            <li><a href="#" class="text-black text-decoration-none fs-6">licences</a></li>
+          </ul>
+        </div>
+      </div>
+  </footer>   
+
+</html>
