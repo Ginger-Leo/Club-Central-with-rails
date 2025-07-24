@@ -21,7 +21,7 @@ Club Central is my sports team management application built with Ruby on Rails. 
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/Ginger-Leo/Club-Central-with-rails-.git
+   git clone https://github.com/Ginger-Leo/Club-Central-with-rails.git
    ```
 
 2. **Install dependencies**
