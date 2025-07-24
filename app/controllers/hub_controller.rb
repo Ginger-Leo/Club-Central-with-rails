@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class HubController < ApplicationController
   before_action :require_login
 
@@ -6,23 +8,23 @@ class HubController < ApplicationController
     @all_events = Event.order(datetime: :asc)
 
     @roster_players = User.where.not(id: current_user.id)
-              .where.not(username: "Admin")
-              .order(:username)
-              .limit(5)
+                          .where.not(username: 'Admin')
+                          .order(:username)
+                          .limit(5)
 
     @all_roster_players = User.where.not(id: current_user.id)
-                             .order(:username)
+                              .order(:username)
 
-    @recent_transactions = Finance.where("payer_id = ? OR payee_id = ?", current_user.id, current_user.id)
-                                 .order(created_at: :desc).limit(10)
+    @recent_transactions = Finance.where('payer_id = ? OR payee_id = ?', current_user.id, current_user.id)
+                                  .order(created_at: :desc).limit(10)
   end
 
   private
 
   def require_login
-    unless current_user
-      redirect_to login_path, alert: "Please log in first."
-    end
+    return if current_user
+
+    redirect_to login_path, alert: 'Please log in first.'
   end
 
   def current_user

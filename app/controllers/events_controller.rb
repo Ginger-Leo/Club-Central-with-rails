@@ -1,25 +1,27 @@
+# frozen_string_literal: true
+
 class EventsController < ApplicationController
-  before_action :set_event, only: [ :destroy, :update ]
-  before_action :require_admin, only: [ :destroy, :update, :create ]
+  before_action :set_event, only: %i[destroy update]
+  before_action :require_admin, only: %i[destroy update create]
 
   def update
     if @event
       if @event.update(event_params)
-        redirect_to hub_path, notice: "Event was successfully updated."
+        redirect_to hub_path, notice: 'Event was successfully updated.'
       else
         redirect_to hub_path, alert: "Failed to update event: #{@event.errors.full_messages.join(', ')}"
       end
     else
-      redirect_to hub_path, alert: "Event not found."
+      redirect_to hub_path, alert: 'Event not found.'
     end
   end
 
   def destroy
     if @event
       @event.destroy
-      redirect_to hub_path, notice: "Event was successfully deleted."
+      redirect_to hub_path, notice: 'Event was successfully deleted.'
     else
-      redirect_to hub_path, alert: "Event not found."
+      redirect_to hub_path, alert: 'Event not found.'
     end
   end
 
@@ -27,7 +29,7 @@ class EventsController < ApplicationController
     @event = Event.new(event_params)
 
     if @event.save
-      redirect_to hub_path, notice: "Event was successfully created."
+      redirect_to hub_path, notice: 'Event was successfully created.'
     else
       redirect_to hub_path, alert: "Failed to create event: #{@event.errors.full_messages.join(', ')}"
     end
@@ -45,8 +47,8 @@ class EventsController < ApplicationController
 
   def require_admin
     @user = User.find_by(id: session[:user_id])
-    unless @user&.access_level == "admin"
-      redirect_to hub_path, alert: "You must be an admin to perform this action."
-    end
+    return if @user&.access_level == 'admin'
+
+    redirect_to hub_path, alert: 'You must be an admin to perform this action.'
   end
 end

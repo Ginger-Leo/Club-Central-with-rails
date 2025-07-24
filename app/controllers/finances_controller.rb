@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 # app/controllers/finances_controller.rb
 class FinancesController < ApplicationController
-  before_action :require_admin, only: [ :index ]
+  before_action :require_admin, only: [:index]
 
   def index
     @all_roster_players = User.all
@@ -11,11 +13,11 @@ class FinancesController < ApplicationController
   def add_payment
     @payer = User.find(params[:user_id])
 
-    if params[:payee_id] == "external"
+    if params[:payee_id] == 'external'
       @payee = nil
-      payee_name = "External"
+      payee_name = 'External'
     else
-      @payee = User.find(params[:payee_id] || User.find_by(access_level: "admin")&.id)
+      @payee = User.find(params[:payee_id] || User.find_by(access_level: 'admin')&.id)
       payee_name = @payee.username
     end
 
@@ -32,7 +34,7 @@ class FinancesController < ApplicationController
         payer_id: @payer.id,
         payee_id: nil,
         amount: -amount,
-        transaction_type: "external",
+        transaction_type: 'external',
         notes: notes
       )
     end
@@ -45,7 +47,7 @@ class FinancesController < ApplicationController
   end
 
   def deduct_payment
-    @payer = User.find(params[:payee_id] || User.find_by(access_level: "admin")&.id)
+    @payer = User.find(params[:payee_id] || User.find_by(access_level: 'admin')&.id)
     @payee = User.find(params[:user_id])
     amount = params[:amount].to_f
     notes = params[:notes]

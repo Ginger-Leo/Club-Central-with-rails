@@ -1,36 +1,40 @@
-FINNISH_FIRST_NAMES = [
-  "Aino", "Aleksi", "Anni", "Arttu", "Eevi", "Elias", "Emma", "Eetu",
-  "Helmi", "Hugo", "Iida", "Jere", "Kalle", "Leevi", "Lilja", "Matias",
-  "Milla", "Sausage", "Niko", "Oona", "Onni", "Pinja", "Roni", "Saga", "Samu",
-  "Siiri", "Tuomas", "Veera", "Ville", "Aada", "Aapo"
-]
+# frozen_string_literal: true
 
-FINNISH_LAST_NAMES = [
-  "Korhonen", "Virtanen", "Makinen", "Nieminen", "Makela", "Hamalanen",
-  "Laine", "Heikkinen", "Koskinen", "Jarvinen", "Lehtonen", "Saarinen",
-  "Salminen", "Heinonen", "Niemi", "Sausage", "Heikkila", "Kinnunen", "Salonen",
-  "Turunen", "Salo", "Laitinen", "Tuomi", "Takala", "Hanninen",
-  "Kallio", "Rautiainen", "Hakkarainen", "Metsala", "Laakso", "Rantanen"
-]
+FINNISH_FIRST_NAMES = %w[
+  Aino Aleksi Anni Arttu Eevi Elias Emma Eetu
+  Helmi Hugo Iida Jere Kalle Leevi Lilja Matias
+  Milla Sausage Niko Oona Onni Pinja Roni Saga Samu
+  Siiri Tuomas Veera Ville Aada Aapo
+].freeze
 
-FINNISH_CITIES = [
-  "Helsinki", "Espoo", "Tampere", "Vantaa", "Oulu", "Turku", "Jyvaskyla",
-  "Lahti", "Kuopio", "Pori", "Joensuu", "Lappeenranta", "Hameenlinna",
-  "Vaasa", "Seinajoki", "Rovaniemi", "Mikkeli", "Kotka", "Salo", "Porvoo"
-]
+FINNISH_LAST_NAMES = %w[
+  Korhonen Virtanen Makinen Nieminen Makela Hamalanen
+  Laine Heikkinen Koskinen Jarvinen Lehtonen Saarinen
+  Salminen Heinonen Niemi Sausage Heikkila Kinnunen Salonen
+  Turunen Salo Laitinen Tuomi Takala Hanninen
+  Kallio Rautiainen Hakkarainen Metsala Laakso Rantanen
+].freeze
+
+FINNISH_CITIES = %w[
+  Helsinki Espoo Tampere Vantaa Oulu Turku Jyvaskyla
+  Lahti Kuopio Pori Joensuu Lappeenranta Hameenlinna
+  Vaasa Seinajoki Rovaniemi Mikkeli Kotka Salo Porvoo
+].freeze
 
 POSITIONS = [
-  "Forward", "Midfielder", "Defender", "Goalkeeper", "Striker", "Winger",
-  "Centre-back", "Full-back", "Attacking midfielder", "Defensive midfielder"
-]
+  'Forward', 'Midfielder', 'Defender', 'Goalkeeper', 'Striker', 'Winger',
+  'Centre-back', 'Full-back', 'Attacking midfielder', 'Defensive midfielder'
+].freeze
 
-unless User.exists?(username: "Admin")
-  admin_user = User.create(access_level: "admin", username: "Admin/Club", email: "admin@example.com", password: "admin123", password_confirmation: "admin123", balence: "500")
-  test_user = User.create(access_level: "player", username: "Terry Player", email: "user@example.com", password: "user123", password_confirmation: "user123", balence: "-100")
+unless User.exists?(username: 'Admin')
+  User.create(access_level: 'admin', username: 'Admin/Club', email: 'admin@example.com',
+              password: 'admin123', password_confirmation: 'admin123', balence: '500')
+  User.create(access_level: 'player', username: 'Terry Player', email: 'user@example.com',
+              password: 'user123', password_confirmation: 'user123', balence: '-100')
 end
 
-if User.where(access_level: "player").count < 100
-  99.times do |i|
+if User.where(access_level: 'player').count < 100
+  99.times do |_i|
     first_name = FINNISH_FIRST_NAMES.sample
     last_name = FINNISH_LAST_NAMES.sample
     username = "#{first_name.downcase} #{last_name.downcase}"
@@ -45,18 +49,18 @@ if User.where(access_level: "player").count < 100
     User.create!(
       username: username,
       email: email,
-      password: "password123",
-      password_confirmation: "password123",
-      access_level: "player",
+      password: 'password123',
+      password_confirmation: 'password123',
+      access_level: 'player',
       position: POSITIONS.sample,
-      chain: [ 1, 2, 3 ].sample.to_s,
-      car: [ true, false ].sample,
+      chain: [1, 2, 3].sample.to_s,
+      car: [true, false].sample,
       location: FINNISH_CITIES.sample
     )
   end
 
-  EVENT_TYPES = [ 'match', 'training', 'special event' ]
-  EVENT_LOCATIONS = FINNISH_CITIES + [ "Main Stadium", "Training Facility", "Community Hall", "Local Sports Park" ]
+  EVENT_TYPES = ['match', 'training', 'special event'].freeze
+  EVENT_LOCATIONS = FINNISH_CITIES + ['Main Stadium', 'Training Facility', 'Community Hall', 'Local Sports Park']
   EVENT_NOTES = {
     'match' => [
       'Crucial league match.', 'Friendly game to test new tactics.', 'Cup tournament first round.',
@@ -70,7 +74,7 @@ if User.where(access_level: "player").count < 100
       'Annual team dinner and awards ceremony.', 'Meet and greet with fans.', 'Sponsor appreciation day.',
       'Youth academy scouting day.', 'Team-building retreat.'
     ]
-  }
+  }.freeze
 end
 
 if Event.count < 100

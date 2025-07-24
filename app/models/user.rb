@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   has_secure_password
   has_many :finances, dependent: :destroy
-  has_many :sent_payments, class_name: "Finance", foreign_key: "payer_id", dependent: :nullify
-  has_many :received_payments, class_name: "Finance", foreign_key: "payee_id", dependent: :nullify
+  has_many :sent_payments, class_name: 'Finance', foreign_key: 'payer_id', dependent: :nullify
+  has_many :received_payments, class_name: 'Finance', foreign_key: 'payee_id', dependent: :nullify
 
   validates :username, presence: true, uniqueness: true
   validates :email, presence: true, uniqueness: true
@@ -10,18 +12,18 @@ class User < ApplicationRecord
   validates :access_level, presence: true
 
   def admin?
-    access_level == "admin"
+    access_level == 'admin'
   end
 
   def player?
-    access_level == "player"
+    access_level == 'player'
   end
 
   def add_payment!(amount, notes = nil, payer = nil)
     increment!(:balance, amount)
     finances.create!(
       amount: amount,
-      transaction_type: "payment",
+      transaction_type: 'payment',
       notes: notes,
       payer: payer,
       payee: self
@@ -32,7 +34,7 @@ class User < ApplicationRecord
     decrement!(:balance, amount)
     finances.create!(
       amount: -amount,
-      transaction_type: "deduction",
+      transaction_type: 'deduction',
       notes: notes,
       payer: self,
       payee: payee
@@ -44,7 +46,7 @@ class User < ApplicationRecord
       decrement!(:balance, amount)
       finances.create!(
         amount: -amount,
-        transaction_type: "payment_sent",
+        transaction_type: 'payment_sent',
         notes: "Payment to #{payee.username}: #{notes}",
         payer: self,
         payee: payee
@@ -53,7 +55,7 @@ class User < ApplicationRecord
       payee.increment!(:balance, amount)
       payee.finances.create!(
         amount: amount,
-        transaction_type: "payment_received",
+        transaction_type: 'payment_received',
         notes: "Payment from #{username}: #{notes}",
         payer: self,
         payee: payee

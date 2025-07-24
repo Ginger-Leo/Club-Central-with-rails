@@ -1,11 +1,14 @@
-require 'spec_helper'
-require 'capybara/rspec'
-require File.expand_path('../config/environment', __dir__)
-require 'rspec/rails'
-require 'selenium-webdriver'
+# frozen_string_literal: true
 
+require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
-abort("The Rails environment is running in production mode!") if Rails.env.production?
+require File.expand_path('../config/environment', __dir__)
+abort('The Rails environment is running in production mode!') if Rails.env.production?
+
+require 'rspec/rails'
+require 'capybara/rspec'
+require 'selenium-webdriver'
+require Rails.root.join('spec', 'sessions_helper')
 
 Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
 
@@ -29,13 +32,13 @@ RSpec.configure do |config|
   end
 end
 
-
 Selenium::WebDriver::Chrome::Service.driver_path = '/usr/bin/chromedriver'
 
 Capybara.register_driver :selenium_chrome_visible do |app|
   service = Selenium::WebDriver::Chrome::Service.new(path: '/usr/bin/chromedriver')
   options = Selenium::WebDriver::Chrome::Options.new
 
+  options.add_argument('--headless')
   options.add_argument('--no-sandbox')
   options.add_argument('--disable-dev-shm-usage')
   options.add_argument('--disable-gpu')
@@ -56,9 +59,6 @@ RSpec.configure do |config|
     driven_by :selenium_chrome_visible
   end
 end
-
-Capybara.default_driver = :selenium_chrome_visible
-Capybara.javascript_driver = :selenium_chrome_visible
 
 Capybara.server_host = '127.0.0.1'
 Capybara.server_port = 3001
