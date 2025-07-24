@@ -8,8 +8,8 @@ default: &default
 development:
   <<: *default
   database: rails_version_development
-  username: <%= ENV['DATABASE_USERNAME'] || 'postgres' %>
-  password: <%= ENV['DATABASE_PASSWORD'] || '' %>
+  username: <%= ENV['DATABASE_USERNAME'] || 'club_central' %>
+  password: <%= ENV['DATABASE_PASSWORD'] || 'ClubCentral85' %>
   host: <%= ENV['DATABASE_HOST'] || 'localhost' %>
   port: <%= ENV['DATABASE_PORT'] || 5432 %>
 
