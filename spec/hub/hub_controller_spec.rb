@@ -13,6 +13,7 @@ RSpec.describe HubController, type: :controller do
 
     context 'when user is logged in' do
       let(:user) { create_test_user }
+
       before do
         login_as(user)
       end

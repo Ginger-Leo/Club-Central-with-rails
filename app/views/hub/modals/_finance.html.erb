@@ -1,0 +1,45 @@
+    <div class="modal fade modal-lg" id="addPaymentModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content border-3 border-colour">
+            <div class="modal-header">
+                <h5 class="modal-title">player makes payment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <%= form_with url: add_payment_finances_path, method: :post, local: true do |form| %>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="user_id" class="form-label">Payer:</label>
+                        <%= form.hidden_field :user_id, value: current_user.id %>
+                        <input type="text" class="form-control" value="<%= current_user.username %>" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="payee_id" class="form-label">Payee:</label>
+                        <%= form.select :payee_id, 
+                            options_from_collection_for_select(
+                                @all_roster_players.select { |player| 
+                                    if current_user.access_level == 'player'
+                                        player.username.downcase == 'admin'
+                                    else
+                                        ['admin', 'external'].include?(player.username.downcase)
+                                    end
+                                }, 
+                                :id, :username
+                            ), 
+                            { prompt: 'Select recipient'}, 
+                            { class: 'form-select' } %>
+                    </div>
+                    <div class="mb-3">
+                        <label for="amount" class="form-label">Amount:</label>
+                        <%= form.number_field :amount, step: 0.01, min: 0.01, class: 'form-control', required: true %>
+                    </div>
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Notes:</label>
+                        <%= form.text_area :notes, rows: 3, class: 'form-control' %>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-hub">confirm payment</button>
+            </div>
+            <%= form.hidden_field :redirect_to, value: hub_path %>
+        <% end %>
+    </div>
+</div>
+</div>

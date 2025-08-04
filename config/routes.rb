@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  root 'sessions#new'
+  root 'hub#index'
 
-  resources :events, only: %i[create update destroy]
+  resources :events, only: %i[create update destroy edit show]
   resources :sessions, only: %i[new create destroy]
   resources :users, only: %i[new create update destroy]
   resources :finances, only: [:index]

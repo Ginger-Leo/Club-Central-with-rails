@@ -1,0 +1,64 @@
+<div class="modal fade modal-lg" id="viewPlayerModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content border-3 border-colour">
+            <div class="modal-header">
+                <h5 class="modal-title">view player</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <% if @roster_players.any? %>
+                    <% if current_user.access_level == 'admin' %>
+                        <% @all_roster_players.each do |player| %>
+                            <div class="mb-3 border-bottom  pb-2">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong><%= player.username.titleize %></strong>
+                                        <span class="badge <%= player.access_level == 'admin' ? 'bg-primary' : 'bg-secondary' %> ms-2">
+                                            <%= player.access_level %>
+                                        </span>
+                                        <div class="text-muted small mb-0">position: <%= player.position %> <span class="ms-2">location: <%= player.location %></span></div>
+                                        <div class="text-muted small">balance: <%= player.balance %></div>
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <% if player.access_level == 'player' && current_user.access_level == 'admin' %>
+                                            <%= button_to promote_user_path(player), method: :patch, class: "btn btn-admin btn-sm me-2", title: "Promote to admin" do %>
+                                            <i class="bi bi-bookmark-plus"></i>
+                                            <% end %>
+                                        <% elsif player.access_level == 'admin' && current_user.access_level == 'admin' %>
+                                            <%= button_to demote_user_path(player), method: :patch, class: "btn btn-outline-warning btn-sm me-2", title: "Demote to player" do %>
+                                            <i class="bi bi-bookmark-check"></i>
+                                            <% end %>
+                                        <% end %>
+                                        <button class="btn btn-outline-primary btn-sm me-2" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#editPlayerModal<%= player.id %>">
+                                            <i class="bi bi-pen"></i>
+                                        </button>
+                                        <%= button_to user_path(player), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-outline-danger btn-sm" do %>
+                                            <i class="bi bi-trash3"></i>
+                                        <% end %>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        <% end %>
+                    <% elsif current_user.access_level == 'player' %>
+                        <% @all_roster_players.each do |player| %>
+                            <div class="mb-3">
+                                <strong><%= player.username.titleize %></strong>
+                                <span class="badge <%= player.access_level == 'admin' ? 'bg-primary' : 'bg-secondary' %> ms-2">
+                                    <%= player.access_level %>
+                                </span>
+                                <div class="text-muted small">position: <%= player.position %></div>
+                            
+                            </div>
+                        <% end %>
+                    <% end %>
+                <% else %>
+                    <p>no players in roster</p>
+                <% end %>
+
+            </div>
+        </div>
+    </div>
+</div>

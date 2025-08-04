@@ -1,20 +1,8 @@
 # frozen_string_literal: true
 
 class EventsController < ApplicationController
-  before_action :set_event, only: %i[destroy update]
-  before_action :require_admin, only: %i[destroy update create]
-
-  def update
-    if @event
-      if @event.update(event_params)
-        redirect_to hub_path, notice: 'Event was successfully updated.'
-      else
-        redirect_to hub_path, alert: "Failed to update event: #{@event.errors.full_messages.join(', ')}"
-      end
-    else
-      redirect_to hub_path, alert: 'Event not found.'
-    end
-  end
+  before_action :set_event, only: %i[destroy]
+  before_action :require_admin, only: %i[destroy create]
 
   def destroy
     if @event

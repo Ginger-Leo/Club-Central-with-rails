@@ -1,8 +1,7 @@
-<body>
-    <h1 class="text-center mt-5">Club Finances</h1>
-    <section class="bg-white d-flex justify-content-center">
-        <div class="container-xl my-4 border-style">
-            <div class="d-flex justify-content-between align-items-center">
+<h1 class="text-center mt-5">Club Finances</h1>
+<section class="bg-white d-flex justify-content-center">
+    <div class="container-xl my-4 border-style">
+        <div class="d-flex justify-content-between align-items-center">
                 <h2 class="pt-3 mb-2">Finances</h2>
                 <div class="d-flex gap-2">
                     <button class="btn btn-outline-primary btn-hub" data-bs-toggle="modal" data-bs-target="#deductPaymentModal">deduct payment</button>
@@ -47,11 +46,9 @@
             </div>
         </div>
     </section>
-    
-    <div class="container-xl mt-4 d-flex justify-content-center">
-        <%= link_to "Back to Hub", hub_path, class: "btn btn-hub mt-4 mb-4" %>
-    </div>
-</body>
+<div class="container-xl mt-4 d-flex justify-content-center">
+    <%= link_to "Back to Hub", hub_path, class: "btn btn-hub mt-4 mb-4" %>
+</div>
 
 <div class="modal fade modal-lg" id="addPaymentModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered ">

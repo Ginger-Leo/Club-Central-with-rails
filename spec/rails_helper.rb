@@ -8,9 +8,9 @@ abort('The Rails environment is running in production mode!') if Rails.env.produ
 require 'rspec/rails'
 require 'capybara/rspec'
 require 'selenium-webdriver'
-require Rails.root.join('spec', 'sessions_helper')
+require Rails.root.join('spec/sessions_helper')
 
-Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
+Dir[Rails.root.join('spec/support/**/*.rb')].sort.each { |f| require f }
 
 begin
   ActiveRecord::Migration.maintain_test_schema!
@@ -25,7 +25,7 @@ RSpec.configure do |config|
 
   config.include SessionsHelper
 
-  config.before(:each) do
+  config.before do
     User.destroy_all
     Event.destroy_all
     Finance.destroy_all
@@ -38,7 +38,7 @@ Capybara.register_driver :selenium_chrome_visible do |app|
   service = Selenium::WebDriver::Chrome::Service.new(path: '/usr/bin/chromedriver')
   options = Selenium::WebDriver::Chrome::Options.new
 
-  options.add_argument('--headless')
+  # options.add_argument('--headless')
   options.add_argument('--no-sandbox')
   options.add_argument('--disable-dev-shm-usage')
   options.add_argument('--disable-gpu')

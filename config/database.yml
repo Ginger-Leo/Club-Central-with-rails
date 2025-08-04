@@ -8,18 +8,18 @@ default: &default
 development:
   <<: *default
   database: rails_version_development
-  username: <%= ENV['DATABASE_USERNAME'] || 'club_central' %>
-  password: <%= ENV['DATABASE_PASSWORD'] || 'ClubCentral85' %>
-  host: <%= ENV['DATABASE_HOST'] || 'localhost' %>
-  port: <%= ENV['DATABASE_PORT'] || 5432 %>
+  username: club_central
+  password: ClubCentral85
+  host: 127.0.0.1
+  port: 5432
 
 test:
   <<: *default
   database: rails_version_test
-  username: <%= ENV['DATABASE_USERNAME'] || 'club_central' %>
-  password: <%= ENV['DATABASE_PASSWORD'] || 'ClubCentral85' %>
-  host: <%= ENV['DATABASE_HOST'] || 'localhost' %>
-  port: <%= ENV['DATABASE_PORT'] || 5432 %>
+  username: club_central
+  password: ClubCentral85
+  host: 127.0.0.1
+  port: 5432
 
 
 production:

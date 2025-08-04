@@ -1,0 +1,41 @@
+
+<div class="modal fade modal-lg" id="viewEventModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content border-3 border-colour">
+            <div class="modal-header">
+                <h5 class="modal-title">view event</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <% if @all_events.any? %>
+                    <% @all_events.each do |event| %>
+                        <div class="mb-3 border-bottom pb-2">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong><%= event.event_type.titleize %></strong>
+                                    <span class="badge bg-secondary ms-2">
+                                        <%= event.datetime.strftime("%a, %b %d, %Y - %I:%M %p") %>
+                                    </span>
+                                    <div class="text-muted small mb-0">Location: <%= event.location %></div>
+                                    <div class="text-muted small"><%= event.notes %></div>
+                                </div>
+                                <% if current_user.access_level == 'admin' %>
+                                    <div class="d-flex justify-content-end">
+                                        <button class="btn btn-outline-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editEventModal<%= event.id %>">
+                                            <i class="bi bi-pen"></i>
+                                        </button>
+                                        <%= button_to event_path(event), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-outline-danger btn-sm" do %>
+                                            <i class="bi bi-trash3"></i>
+                                        <% end %>
+                                    </div>
+                                <% end %>
+                            </div>
+                        </div>
+                    <% end %>
+                <% else %>
+                    <div class="text-muted small">No events upcoming</div>
+                <% end %>
+            </div> 
+        </div>
+    </div>
+</div>

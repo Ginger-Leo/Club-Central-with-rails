@@ -1,0 +1,45 @@
+<% if current_user.access_level == 'admin' %>
+    <% @upcoming_events.each do |event| %>
+        <div class="modal fade modal-lg" id="editEventModal<%= event.id %>" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered ">
+                <div class="modal-content border-3 border-colour">
+                    <div class="modal-header">
+                        <h5 class="modal-title">edit event: <%= event.event_type.titleize %></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <%= form_with model: event, local: true do |form| %>
+                            <div class="mb-3">
+                                <label for="event_datetime" class="form-label">date and time:</label>
+                                <%= form.datetime_local_field :datetime, class: 'form-control', required: true %>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="event_event_type" class="form-label">event type:</label>
+                                <%= form.select :event_type, 
+                                    [['Special Event', 'special event'], ['Match', 'match'], ['Training', 'training']], 
+                                    { prompt: 'Select event type' }, 
+                                    { class: 'form-select', required: true } %>
+                            </div>
+                                                                            
+                            <div class="mb-3">
+                                <label for="event_location" class="form-label">location:</label>
+                                <%= form.text_field :location, class: 'form-control' %>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="event_notes" class="form-label">notes:</label>
+                                <%= form.text_area :notes, rows: 3, class: 'form-control' %>
+                            </div>
+                                                                                                                            
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">cancel</button>
+                                <%= form.submit "update event", class: "btn btn-primary btn-hub" %>
+                            </div>
+                        <% end %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% end %>
+<% end %>

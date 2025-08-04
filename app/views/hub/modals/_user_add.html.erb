@@ -1,0 +1,59 @@
+<div class="modal fade modal-lg" id="addPlayerModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content border-3 border-colour">
+            <div class="modal-header">
+                <h5 class="modal-title">add player</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <%= form_with model: User.new, local: true do |form| %>
+                    <%= form.hidden_field :admin_adding_player, value: true %>
+                    
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username:</label>
+                        <%= form.text_field :username, class: 'form-control', required: true %>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email:</label>
+                        <%= form.email_field :email, class: 'form-control', required: true %>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password:</label>
+                        <%= form.password_field :password, class: 'form-control', required: true %>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="position" class="form-label">Position:</label>
+                        <%= form.text_field :position, class: 'form-control' %>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="chain" class="form-label">Chain:</label>
+                        <%= form.text_field :chain, class: 'form-control' %>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="location" class="form-label">Location:</label>
+                        <%= form.text_field :location, class: 'form-control' %>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <%= form.check_box :car, class: 'form-check-input' %>
+                            <label class="form-check-label" for="user_car">
+                                has car
+                            </label>
+                        </div>
+                    </div>
+                        
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Cancel</button>
+                        <%= form.submit "Add Player", class: "btn btn-primary btn-hub" %>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>
