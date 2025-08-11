@@ -6,7 +6,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <%= form_with model: Event.new, local: true do |form| %>
+                <%= form_with model: Event.new, url: events_path(locale: I18n.locale), local: true do |form| %>
                     <div class="mb-3">
                         <label for="event_datetime" class="form-label">date and time:</label>
                         <%= form.datetime_local_field :datetime, class: 'form-control', required: true %>

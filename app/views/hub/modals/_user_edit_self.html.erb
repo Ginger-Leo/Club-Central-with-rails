@@ -6,7 +6,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <%= form_with model: current_user, local: true do |form| %>
+                <%= form_with model: current_user, url: user_path(current_user, locale: I18n.locale), local: true do |form| %>
                     <div class="mb-3">
                         <label for="username" class="form-label">name:</label>
                         <%= form.text_field :username, class: 'form-control', required: true %>

@@ -92,6 +92,6 @@ if Event.count < 100
     )
   end
 
-  Rails.logger.debug "Total users: #{User.count}"
-  Rails.logger.debug "Total events: #{Event.count}"
+  Rails.logger.debug { "Total users: #{User.count}" }
+  Rails.logger.debug { "Total events: #{Event.count}" }
 end

@@ -1,36 +1,35 @@
 <div class="container-fluid">
     <div class="row g-0 vh-100-minus-footer">
-
         <div class="col-md-6 cc-green-bg d-flex align-items-center justify-content-center">
-                <div class="text-center">
-                    <div class="logo-circles bg-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 250px; height: 250px;">
-                        <div class="cc-green-bg rounded-circle d-flex align-items-center justify-content-center" style="width: 225px; height: 225px;">
-                            <h1 class="text-black mb-0 fs-1 text-start">club<br>central</h1>
-                        </div>
-                    </div>
-                    <p class="text-black fs-3">User Registration System</p>
-                    <div class="mt-5">
-                        <%= link_to "sign up", signup_path, class: "btn btn-primary btn-color fs-3" %>
+            <div class="text-center">
+                <div class="logo-circles bg-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 250px; height: 250px;">
+                    <div class="cc-green-bg rounded-circle d-flex align-items-center justify-content-center" style="width: 225px; height: 225px;">
+                        <h1 class="text-black mb-0 fs-1 text-start">club<br>central</h1>
                     </div>
                 </div>
-            </div>
-            
-            <div class="col-md-6 bg-white d-flex align-items-center justify-content-center">
-                <div class="w-75">
-                    <h1 class="mb-2">Login Account</h1>
-                    <p class="mb-4">Sign in to continue your progress</p>
-                 
-                    <%= form_with url: login_path, local: true do |form| %>
-                        <div class="mb-3">
-                            <%= form.label :email, class: "form-label" %>
-                            <%= form.email_field :email, class: "form-control" %>
-                        </div>
-                        <div class="mb-3">
-                            <%= form.label :password, class: "form-label" %>
-                            <%= form.password_field :password, class: "form-control" %>
-                        </div>
-                        <%= form.submit "sign in", class: "btn btn-primary btn-color fs-3 w-100" %>
-                    <% end %>
+                <p class="text-black fs-3">User Registration System</p>
+                <div class="mt-5">
+                    <%= link_to "sign up", signup_path, class: "btn btn-primary btn-color fs-3" %>
+                </div>
             </div>
         </div>
+            
+        <div class="col-md-6 bg-white d-flex align-items-center justify-content-center">
+            <div class="w-75">
+                <h1 class="mb-2">Login Account</h1>
+                <p class="mb-4">Sign in to continue your progress</p>
+                
+                <%= form_with url: login_path(locale: I18n.locale), local: true do |form| %>
+                    <div class="mb-3">
+                        <%= form.label :email, class: "form-label" %>
+                        <%= form.email_field :email, class: "form-control" %>
+                    </div>
+                    <div class="mb-3">
+                        <%= form.label :password, class: "form-label" %>
+                        <%= form.password_field :password, class: "form-control" %>
+                    </div>
+                    <%= form.submit "sign in", class: "btn btn-primary btn-color fs-3 w-100" %>
+                <% end %>
+        </div>
     </div>
+</div>

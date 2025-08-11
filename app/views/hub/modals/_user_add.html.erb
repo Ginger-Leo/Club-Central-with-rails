@@ -6,7 +6,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <%= form_with model: User.new, local: true do |form| %>
+                <%= form_with model: User.new, url: users_path(locale: I18n.locale), local: true do |form| %>
                     <%= form.hidden_field :admin_adding_player, value: true %>
                     
                     <div class="mb-3">

@@ -10,7 +10,7 @@ require 'capybara/rspec'
 require 'selenium-webdriver'
 require Rails.root.join('spec/sessions_helper')
 
-Dir[Rails.root.join('spec/support/**/*.rb')].sort.each { |f| require f }
+Rails.root.glob('spec/support/**/*.rb').each { |f| require f }
 
 begin
   ActiveRecord::Migration.maintain_test_schema!

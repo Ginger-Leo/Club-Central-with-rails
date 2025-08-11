@@ -4,15 +4,6 @@ class EventsController < ApplicationController
   before_action :set_event, only: %i[destroy]
   before_action :require_admin, only: %i[destroy create]
 
-  def destroy
-    if @event
-      @event.destroy
-      redirect_to hub_path, notice: 'Event was successfully deleted.'
-    else
-      redirect_to hub_path, alert: 'Event not found.'
-    end
-  end
-
   def create
     @event = Event.new(event_params)
 
@@ -23,6 +14,15 @@ class EventsController < ApplicationController
     end
   end
 
+  def destroy
+    if @event
+      @event.destroy
+      redirect_to hub_path, notice: 'Event was successfully deleted.'
+    else
+      redirect_to hub_path, alert: 'Event not found.'
+    end
+  end
+
   private
 
   def set_event
@@ -30,7 +30,7 @@ class EventsController < ApplicationController
   end
 
   def event_params
-    params.require(:event).permit(:datetime, :event_type, :location, :notes)
+    params.expect(event: %i[datetime event_type location notes])
   end
 
   def require_admin

@@ -10,6 +10,8 @@ class UsersController < ApplicationController
     @user = User.new
   end
 
+  def edit; end
+
   def create
     @user = User.new(user_params)
 
@@ -28,8 +30,6 @@ class UsersController < ApplicationController
       render :new
     end
   end
-
-  def edit; end
 
   def update
     if @user.update(user_params)
@@ -75,9 +75,9 @@ class UsersController < ApplicationController
   def user_params
     current_user = User.find_by(id: session[:user_id])
     if current_user&.access_level == 'admin' || params[:user][:admin_adding_player]
-      params.require(:user).permit(:username, :email, :password, :position, :chain, :car, :location)
+      params.expect(user: %i[username email password position chain car location])
     else
-      params.require(:user).permit(:username, :email, :password)
+      params.expect(user: %i[username email password])
     end
   end
 end

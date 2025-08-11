@@ -57,7 +57,7 @@
                 <h5 class="modal-title">player makes payment</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <%= form_with url: add_payment_finances_path, method: :post, local: true do |form| %>
+            <%= form_with url: add_payment_club_finances_path(locale: I18n.locale), method: :post, local: true do |form| %>
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="user_id" class="form-label">Payer (who is paying):</label>
@@ -95,7 +95,7 @@
                 <h5 class="modal-title">deduct payment</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <%= form_with url: deduct_payment_finances_path, method: :post, local: true do |form| %>
+            <%= form_with url: deduct_payment_club_finances_path(locale: I18n.locale), method: :post, local: true do |form| %>
                 <div class="modal-body">
                     <%= form.hidden_field :payee_id, value: User.find_by(username: 'Admin')&.id %>
                     <div class="mb-3">

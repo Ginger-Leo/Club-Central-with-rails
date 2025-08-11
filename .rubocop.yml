@@ -1,13 +1,33 @@
-require:
+plugins:
   - rubocop-rails
   - rubocop-rspec
 
 AllCops:
+  SuggestExtensions: false
   TargetRubyVersion: 3.3
+  NewCops: enable
   Exclude:
     - 'bin/**/*'
     - 'db/schema.rb'
+    - 'db/migrate/*'
     - 'vendor/**/*'
+    - 'node_modules/**/*'
+
+# Standard settings - remove todo inheritance
+# inherit_from: .rubocop_todo.yml
+
+# Rails-specific relaxed settings
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+    - 'config/routes.rb'
+    - 'db/seeds.rb'
 
 Style/Documentation:
-  Enabled: false
+  Enabled: false  # Keep this disabled for now
+
+# Slightly more relaxed line length for Rails projects
+Layout/LineLength:
+  Max: 140
+  Exclude:
+    - 'db/migrate/*'

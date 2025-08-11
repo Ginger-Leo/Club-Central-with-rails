@@ -24,7 +24,7 @@
                                         <button class="btn btn-outline-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editEventModal<%= event.id %>">
                                             <i class="bi bi-pen"></i>
                                         </button>
-                                        <%= button_to event_path(event), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-outline-danger btn-sm" do %>
+                                        <%= button_to event_path(event, locale: I18n.locale), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-outline-danger btn-sm" do %>
                                             <i class="bi bi-trash3"></i>
                                         <% end %>
                                     </div>
